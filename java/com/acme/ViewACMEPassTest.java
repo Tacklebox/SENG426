@@ -58,6 +58,11 @@ public class ViewACMEPassTest {
     public void ensureTableIsOnThePage(){
         login();
 
+        WebElement element = driver.findElement(By.xpath("//a[contains(text(),'ACMEPass')]"));
+
+        JavascriptExecutor executor = (JavascriptExecutor) driver;
+        executor.executeScript("arguments[0].click();", element);
+
         List<WebElement> tableHeadings = driver.findElements(By.xpath("//th"));
 
         assertEquals("ID", tableHeadings.get(0).getText());
