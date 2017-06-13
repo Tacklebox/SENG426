@@ -71,9 +71,7 @@ public class ViewACMEPassTest {
         assertEquals("Password", tableHeadings.get(3).getText());
         assertEquals("Created Date", tableHeadings.get(4).getText());
         assertEquals("Last Modified Date", tableHeadings.get(5).getText());
-
-
-
+        
     }
 
     @After
