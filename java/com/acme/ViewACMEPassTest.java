@@ -36,13 +36,7 @@ public class ViewACMEPassTest {
 
     @Test
     public void viewACMEPass(){
-        driver.get(url);
-        driver.findElement(By.className("glyphicon-log-in")).click();
-        driver.findElement(By.id("username")).sendKeys("jo.thomas@acme.com");
-        driver.findElement(By.id("password")).sendKeys("mustang");
-        driver.findElement(By.className("btn-primary")).click();
-
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        login();
 
         WebElement element = driver.findElement(By.xpath("//a[contains(text(),'ACMEPass')]"));
 
@@ -62,13 +56,17 @@ public class ViewACMEPassTest {
 
     @Test
     public void ensureTableIsOnThePage(){
-        driver.get(url);
-        driver.findElement(By.className("glyphicon-log-in")).click();
-        driver.findElement(By.id("username")).sendKeys("jo.thomas@acme.com");
-        driver.findElement(By.id("password")).sendKeys("mustang");
-        driver.findElement(By.className("btn-primary")).click();
+        login();
 
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        List<WebElement> tableHeadings = driver.findElements(By.xpath("//th"));
+
+        assertEquals("ID", tableHeadings.get(0).getText());
+        assertEquals("Site", tableHeadings.get(1).getText());
+        assertEquals("Login", tableHeadings.get(2).getText());
+        assertEquals("Password", tableHeadings.get(3).getText());
+        assertEquals("Created Date", tableHeadings.get(4).getText());
+        assertEquals("Last Modified Date", tableHeadings.get(5).getText());
+
 
 
     }
@@ -80,5 +78,13 @@ public class ViewACMEPassTest {
         if (!"".equals(verificationErrorString)) {
             fail(verificationErrorString);
         }
+    }
+
+    public void login(){
+        driver.get(url);
+        driver.findElement(By.className("glyphicon-log-in")).click();
+        driver.findElement(By.id("username")).sendKeys("jo.thomas@acme.com");
+        driver.findElement(By.id("password")).sendKeys("mustang");
+        driver.findElement(By.className("btn-primary")).click();
     }
 }
