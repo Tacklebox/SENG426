@@ -21,9 +21,9 @@ public class TestSelenium {
 
     @Before
     public void setUp() throws Exception {
-        System.setProperty("webdriver.chrome.driver", "C:\\Users\\Zev\\dev\\426 Project\\selenium\\chromedriver_win32\\chromedriver.exe");
+        //System.setProperty("webdriver.gecko.driver", "C:\\acme\\geckodriver.exe");
 
-        driver = new ChromeDriver();
+        driver = new FirefoxDriver();
         url = "http://localhost:8080/#/";
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
