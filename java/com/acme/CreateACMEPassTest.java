@@ -12,9 +12,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  * Created by justinmacaulay on 2017-06-13.
@@ -42,28 +40,67 @@ public class CreateACMEPassTest {
     }
 
     @Test
-    public void createACMEPass(){
+    public void createACMEPass() throws InterruptedException {
         driver.findElement(By.xpath("//span[contains(text(),'Create new ACME Pass')]")).click();
         //populate fields
         driver.findElement(By.id("field_site")).sendKeys("TestSite");
         driver.findElement(By.id("field_login")).sendKeys("TestLogin");
         driver.findElement(By.id("field_password")).sendKeys("TestPass");
+
         //save ACMEPass
         driver.findElement(By.xpath("//span[contains(text(),'Save')]")).click();
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+
         //ensure the newly added password exists in the list
+        //driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         WebElement ACMEPassLoginLabel = driver.findElement(By.xpath("//td[contains(text(),'TestSite')]"));
         assertEquals("TestSite", ACMEPassLoginLabel.getText());
-
-
         //CLEANUP
         //get the table row/then click the delete button
         ACMEPassLoginLabel.findElement(By.xpath("./..//button[contains(@class, 'btn btn-danger btn-sm')]")).click();
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
         //confirm delete
         driver.findElement(By.xpath("//span[contains(text(), 'Delete')]")).click();
     }
+
+    @Test
+    public void createACMEPassWithoutSite(){
+        driver.findElement(By.xpath("//span[contains(text(),'Create new ACME Pass')]")).click();
+        //populate fields
+        //driver.findElement(By.id("field_site")).sendKeys("TestSite");
+        driver.findElement(By.id("field_login")).sendKeys("TestLogin");
+        driver.findElement(By.id("field_password")).sendKeys("TestPass");
+
+        //ASSERT save button is disabled
+        assertNotNull(driver.findElement(By.xpath("//span[contains(text(),'Save')]/..")).getAttribute("disabled"));
+    }
+
+    @Test
+    public void createACMEPassWithoutLogin(){
+        driver.findElement(By.xpath("//span[contains(text(),'Create new ACME Pass')]")).click();
+
+        //populate fields
+        driver.findElement(By.id("field_site")).sendKeys("TestSite");
+        //driver.findElement(By.id("field_login")).sendKeys("TestLogin");
+        driver.findElement(By.id("field_password")).sendKeys("TestPass");
+
+        //ASSERT save button is disabled
+        assertNotNull(driver.findElement(By.xpath("//span[contains(text(),'Save')]/..")).getAttribute("disabled"));
+
+    }
+
+    @Test
+    public void createACMEPassWithoutPassword(){
+        driver.findElement(By.xpath("//span[contains(text(),'Create new ACME Pass')]")).click();
+
+        //populate fields
+        driver.findElement(By.id("field_site")).sendKeys("TestSite");
+        driver.findElement(By.id("field_login")).sendKeys("TestLogin");
+        //driver.findElement(By.id("field_password")).sendKeys("TestPass");
+
+        //ASSERT save button is disabled
+        assertNotNull(driver.findElement(By.xpath("//span[contains(text(),'Save')]/..")).getAttribute("disabled"));
+    }
+
 
     @After
     public void tearDown() throws Exception {
