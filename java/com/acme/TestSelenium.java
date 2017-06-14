@@ -5,7 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import java.util.concurrent.TimeUnit;
@@ -21,7 +20,7 @@ public class TestSelenium {
 
     @Before
     public void setUp() throws Exception {
-        //System.setProperty("webdriver.gecko.driver", "C:\\acme\\geckodriver.exe");
+        //System.setProperty("webdriver.gecko.driver");
 
         driver = new FirefoxDriver();
         url = "http://localhost:8080/#/";
