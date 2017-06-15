@@ -25,6 +25,7 @@ public class EditACMEPassTest {
     private WebDriver driver;
     private String url;
     private StringBuffer verificationErrors = new StringBuffer();
+    private int number = 1;
 
     @Before
     public void setUp() throws Exception {
@@ -33,15 +34,15 @@ public class EditACMEPassTest {
         url = "http://localhost:8080/#/";
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
-    }
 
-    @Test
-    public void editExistingPasswordChangePassword(){
-        int number = 1;
         login();
         navigateToACMEPass();
         createPasswords(number);
 
+    }
+
+    @Test
+    public void editExistingPasswordChangePassword(){
 
         driver.findElement(By.xpath("//span[contains(@class, 'glyphicon-pencil')]")).click();
         WebElement password = driver.findElement(By.id("field_password"));
@@ -59,11 +60,6 @@ public class EditACMEPassTest {
 
     @Test
     public void editExistingPasswordChangePasswordButCancel(){
-        int number = 1;
-        login();
-        navigateToACMEPass();
-        createPasswords(number);
-
 
         driver.findElement(By.xpath("//span[contains(@class, 'glyphicon-pencil')]")).click();
         WebElement password = driver.findElement(By.id("field_password"));
@@ -80,11 +76,6 @@ public class EditACMEPassTest {
 
     @Test
     public void editExistingPasswordChangeSite(){
-        int number = 1;
-        login();
-        navigateToACMEPass();
-        createPasswords(number);
-
 
         driver.findElement(By.xpath("//span[contains(@class, 'glyphicon-pencil')]")).click();
         WebElement Site = driver.findElement(By.id("field_site"));
@@ -106,11 +97,6 @@ public class EditACMEPassTest {
 
     @Test
     public void editExistingPasswordChangeSiteButCancel(){
-        int number = 1;
-        login();
-        navigateToACMEPass();
-        createPasswords(number);
-
 
         driver.findElement(By.xpath("//span[contains(@class, 'glyphicon-pencil')]")).click();
         WebElement password = driver.findElement(By.id("field_site"));
@@ -128,11 +114,6 @@ public class EditACMEPassTest {
 
     @Test
     public void editExistingPasswordChangeLogin(){
-        int number = 1;
-        login();
-        navigateToACMEPass();
-        createPasswords(number);
-
 
         driver.findElement(By.xpath("//span[contains(@class, 'glyphicon-pencil')]")).click();
         WebElement password = driver.findElement(By.id("field_login"));
@@ -147,11 +128,6 @@ public class EditACMEPassTest {
 
     @Test
     public void editExistingPasswordChangeLoginButCancel(){
-        int number = 1;
-        login();
-        navigateToACMEPass();
-        createPasswords(number);
-
 
         driver.findElement(By.xpath("//span[contains(@class, 'glyphicon-pencil')]")).click();
         WebElement password = driver.findElement(By.id("field_login"));
@@ -166,11 +142,7 @@ public class EditACMEPassTest {
 
     @Test
     public void editExistingPasswordChangePasswordByGenerateButton(){
-        int number = 1;
         String genPass = "";
-        login();
-        navigateToACMEPass();
-        createPasswords(number);
 
         driver.findElement(By.xpath("//span[contains(@class, 'glyphicon-pencil')]")).click();
         driver.findElement(By.xpath("//span[contains(@class,'glyphicon-refresh')]")).click();
@@ -192,11 +164,7 @@ public class EditACMEPassTest {
 
     @Test
     public void editExistingPasswordChangePasswordByGenerateButtonButCancel(){
-        int number = 1;
         String genPass = "";
-        login();
-        navigateToACMEPass();
-        createPasswords(number);
 
         driver.findElement(By.xpath("//span[contains(@class, 'glyphicon-pencil')]")).click();
         driver.findElement(By.xpath("//span[contains(@class,'glyphicon-refresh')]")).click();
