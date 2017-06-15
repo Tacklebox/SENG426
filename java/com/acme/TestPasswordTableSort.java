@@ -96,6 +96,7 @@ public class TestPasswordTableSort {
         sortByHeader(4, false); // Created Date
         sortByHeader(4, true);
         sortByHeader(5, false); // Last Modified Date
+        sortByHeader(5, true); 
 
         // Remove the passwords we made
         cleanupPasswords(numTestPasswordsCreated);
