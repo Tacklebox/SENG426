@@ -15,8 +15,7 @@ import java.util.concurrent.TimeUnit;
 import static org.junit.Assert.*;
 
 /**
- * Created by justinmacaulay on 2017-06-13.
- * Modified by jasonsyrotuck on 2017-06-13
+ * Modified from ViewACMEPassTest by jasonsyrotuck on 2017-06-13
  */
 public class CreateACMEPassTest {
 
@@ -40,13 +39,42 @@ public class CreateACMEPassTest {
     }
 
     @Test
-    public void createACMEPass() throws InterruptedException {
+    public void createACMEPass(){
         driver.findElement(By.xpath("//span[contains(text(),'Create new ACME Pass')]")).click();
         //populate fields
         driver.findElement(By.id("field_site")).sendKeys("TestSite");
         driver.findElement(By.id("field_login")).sendKeys("TestLogin");
         driver.findElement(By.id("field_password")).sendKeys("TestPass");
 
+        //save ACMEPass
+        driver.findElement(By.xpath("//span[contains(text(),'Save')]")).click();
+
+        //ensure the newly added password exists in the list
+        //driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        WebElement ACMEPassLoginLabel = driver.findElement(By.xpath("//td[contains(text(),'TestSite')]"));
+        assertEquals("TestSite", ACMEPassLoginLabel.getText());
+
+        //CLEANUP
+        //get the table row/then click the delete button
+        ACMEPassLoginLabel.findElement(By.xpath("./..//button[contains(@class, 'btn btn-danger btn-sm')]")).click();
+
+        //confirm delete
+        driver.findElement(By.xpath("//span[contains(text(), 'Delete')]")).click();
+    }
+
+    @Test
+    public void createACMEPassWithGenerator(){
+        driver.findElement(By.xpath("//span[contains(text(),'Create new ACME Pass')]")).click();
+        //populate fields
+        driver.findElement(By.id("field_site")).sendKeys("TestSite");
+        driver.findElement(By.id("field_login")).sendKeys("TestLogin");
+
+        //use generate password applet
+        driver.findElement(By.xpath("//span[contains(@class,'glyphicon-refresh')]")).click();
+        driver.findElement(By.xpath("//span[contains(@class,'glyphicon-refresh')]")).click();
+        driver.findElement(By.cssSelector("input#field_password")).getAttribute("value");
+
+        driver.findElement(By.xpath("//span[contains(text(),'Use')]")).click();
         //save ACMEPass
         driver.findElement(By.xpath("//span[contains(text(),'Save')]")).click();
 
@@ -101,6 +129,31 @@ public class CreateACMEPassTest {
         assertNotNull(driver.findElement(By.xpath("//span[contains(text(),'Save')]/..")).getAttribute("disabled"));
     }
 
+    @Test
+    public void createACMEPassCancel(){
+        driver.findElement(By.xpath("//span[contains(text(),'Create new ACME Pass')]")).click();
+
+        //get current footer text
+        WebElement ACMEPassTableFooter = driver.findElement(By.xpath("//div[contains(text(),'Showing')]"));
+        String currentFooterText = ACMEPassTableFooter.getText();
+
+        //populate fields
+        driver.findElement(By.id("field_site")).sendKeys("TestSiteCANCELLED");
+        driver.findElement(By.id("field_login")).sendKeys("TestLogin");
+        driver.findElement(By.id("field_password")).sendKeys("TestPass");
+
+        //cancel create
+        driver.findElement(By.xpath("//span[contains(text(),'Cancel')]")).click();
+
+        //get new footer text
+        ACMEPassTableFooter = driver.findElement(By.xpath("//div[contains(text(),'Showing')]"));
+        String newFooterText = ACMEPassTableFooter.getText();
+
+        //check that the old string and new string are the same
+        //ergo, new one was cancelled
+        assertEquals( currentFooterText , newFooterText );
+
+    }
 
     @After
     public void tearDown() throws Exception {
