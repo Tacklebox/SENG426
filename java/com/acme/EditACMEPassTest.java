@@ -87,13 +87,19 @@ public class EditACMEPassTest {
 
 
         driver.findElement(By.xpath("//span[contains(@class, 'glyphicon-pencil')]")).click();
-        WebElement password = driver.findElement(By.id("field_site"));
-        password.clear();
-        password.sendKeys("TestingSite");
+        WebElement Site = driver.findElement(By.id("field_site"));
+        Site.clear();
+        Site.sendKeys("TestingSite");
         driver.findElement(By.xpath("//span[contains(text(),'Save')]")).click();
-        driver.navigate().refresh();
 
-        assertEquals("TestingSite", driver.findElement(By.xpath("//td[contains(text(),'TestingSite')]")).getText());
+        WebElement ACMEPassSiteLabel = driver.findElement(By.xpath("//td[contains(text(),'TestingSite')]"));
+        assertEquals("TestingSite", ACMEPassSiteLabel.getText());
+
+        driver.findElement(By.xpath("//span[contains(@class, 'glyphicon-pencil')]")).click();
+        Site = driver.findElement(By.id("field_site"));
+        Site.clear();
+        Site.sendKeys("TestSite0");
+        driver.findElement(By.xpath("//span[contains(text(),'Save')]")).click();
 
         cleanupPasswords(number);
     }
@@ -111,52 +117,105 @@ public class EditACMEPassTest {
         password.clear();
         password.sendKeys("TestingSite");
         driver.findElement(By.xpath("//span[contains(text(),'Cancel')]")).click();
-        driver.navigate().refresh();
+        driver.findElement(By.xpath("//span[contains(@class, 'glyphicon-eye-open')]")).click();
 
-        WebElement site = driver.findElement(By.xpath("//table/tr/td[contains(text(),'TestSite0')]"));
+        WebElement site = driver.findElement(By.xpath("//td[contains(text(),'TestSite0')]"));
 
         assertNotSame("TestingSite", site.getText());
 
         cleanupPasswords(number);
     }
-//
-//    @Test
-//    public void editExistingPasswordChangeLogin(){
-//        int number = 1;
-//        login();
-//        navigateToACMEPass();
-//        createPasswords(number);
-//
-//
-//        driver.findElement(By.xpath("//span[contains(@class, 'glyphicon-pencil')]")).click();
-//        WebElement password = driver.findElement(By.id("field_login"));
-//        password.clear();
-//        password.sendKeys("TestingLogin");
-//        driver.findElement(By.xpath("//span[contains(text(),'Save')]")).click();
-//
-//        assertEquals("TestingLogin", driver.findElement(By.xpath("//td[contains(text(),'TestingLogin'")).getText());
-//
-//        cleanupPasswords(number);
-//    }
-//
-//    @Test
-//    public void editExistingPasswordChangeLoginButCancel(){
-//        int number = 1;
-//        login();
-//        navigateToACMEPass();
-//        createPasswords(number);
-//
-//
-//        driver.findElement(By.xpath("//span[contains(@class, 'glyphicon-pencil')]")).click();
-//        WebElement password = driver.findElement(By.id("field_login"));
-//        password.clear();
-//        password.sendKeys("TestingLogin");
-//        driver.findElement(By.xpath("//span[contains(text(),'Save')]")).click();
-//
-//        assertNotSame("TestingLogin", driver.findElement(By.xpath("//td[contains(text(),'TestLogin0'")).getText());
-//
-//        cleanupPasswords(number);
-//    }
+
+    @Test
+    public void editExistingPasswordChangeLogin(){
+        int number = 1;
+        login();
+        navigateToACMEPass();
+        createPasswords(number);
+
+
+        driver.findElement(By.xpath("//span[contains(@class, 'glyphicon-pencil')]")).click();
+        WebElement password = driver.findElement(By.id("field_login"));
+        password.clear();
+        password.sendKeys("TestingLogin");
+        driver.findElement(By.xpath("//span[contains(text(),'Save')]")).click();
+
+        assertEquals("TestingLogin", driver.findElement(By.xpath("//td[contains(text(),'TestingLogin')]")).getText());
+
+        cleanupPasswords(number);
+    }
+
+    @Test
+    public void editExistingPasswordChangeLoginButCancel(){
+        int number = 1;
+        login();
+        navigateToACMEPass();
+        createPasswords(number);
+
+
+        driver.findElement(By.xpath("//span[contains(@class, 'glyphicon-pencil')]")).click();
+        WebElement password = driver.findElement(By.id("field_login"));
+        password.clear();
+        password.sendKeys("TestingLogin");
+        driver.findElement(By.xpath("//span[contains(text(),'Cancel')]")).click();
+
+        assertNotSame("TestingLogin", driver.findElement(By.xpath("//td[contains(text(),'TestLogin0')]")).getText());
+
+        cleanupPasswords(number);
+    }
+
+    @Test
+    public void editExistingPasswordChangePasswordByGenerateButton(){
+        int number = 1;
+        String genPass = "";
+        login();
+        navigateToACMEPass();
+        createPasswords(number);
+
+        driver.findElement(By.xpath("//span[contains(@class, 'glyphicon-pencil')]")).click();
+        driver.findElement(By.xpath("//span[contains(@class,'glyphicon-refresh')]")).click();
+        driver.findElement(By.xpath("//span[contains(@class,'glyphicon-refresh')]")).click();
+        genPass = driver.findElement(By.cssSelector("input#field_password")).getAttribute("value");
+
+        driver.findElement(By.xpath("//span[contains(text(),'Use')]")).click();
+        driver.findElement(By.xpath("//span[contains(text(),'Save')]")).click();
+
+        driver.findElement(By.xpath("//span[contains(@class, 'glyphicon-eye-open')]")).click();
+        WebElement changedPass = driver.findElement(By.cssSelector("input.acmepass-password"));
+
+        assertEquals(genPass, changedPass.getAttribute("value"));
+
+
+
+        cleanupPasswords(number);
+    }
+
+    @Test
+    public void editExistingPasswordChangePasswordByGenerateButtonButCancel(){
+        int number = 1;
+        String genPass = "";
+        login();
+        navigateToACMEPass();
+        createPasswords(number);
+
+        driver.findElement(By.xpath("//span[contains(@class, 'glyphicon-pencil')]")).click();
+        driver.findElement(By.xpath("//span[contains(@class,'glyphicon-refresh')]")).click();
+        driver.findElement(By.xpath("//span[contains(@class,'glyphicon-refresh')]")).click();
+        genPass = driver.findElement(By.cssSelector("input#field_password")).getAttribute("value");
+
+        driver.findElement(By.xpath("//span[contains(text(),'Use')]")).click();
+        driver.findElement(By.xpath("//span[contains(text(),'Cancel')]")).click();
+
+        driver.findElement(By.xpath("//span[contains(@class, 'glyphicon-eye-open')]")).click();
+        WebElement changedPass = driver.findElement(By.cssSelector("input.acmepass-password"));
+
+        assertNotSame(genPass, changedPass.getAttribute("value"));
+
+
+
+        cleanupPasswords(number);
+    }
+
 
 
 
