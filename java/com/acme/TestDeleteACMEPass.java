@@ -50,26 +50,28 @@ public class TestDeleteACMEPass {
         driver.findElement(By.id("field_password")).sendKeys("TestPassD");
         //save ACMEPass
         driver.findElement(By.xpath("//span[contains(text(),'Save')]")).click();
-
-        //ensure the newly added password exists in the list
-        WebElement ACMEPassLoginLabel = driver.findElement(By.xpath("//td[contains(text(),'TestSiteD')]"));
-        //get the table row/then click the delete button
-        ACMEPassLoginLabel.findElement(By.xpath("./..//button[contains(@class, 'btn btn-danger btn-sm')]")).click();
+        
+        Thread.sleep(5000);
 
         //get the rows of the table
         //each row should be a different password
         List<WebElement> rows = driver.findElements(By.tagName("tr"));
-        
-        //should be a list object not null
-    	System.err.println(rows);
+        boolean atLeastOneDiff = false;
 
+        //should be a list object not null
+    	System.err.println("(object) list of rows:>"+rows);
+
+    	int numRowsBefore;
+    	int numRowsAfter;
+
+    	/*
     	String[] acmeListBefore = new String[100];
         String[] acmeListAfter = new String[100];
         int i =0;
         for(WebElement e : rows){
         	List<WebElement> cell = e.findElements(By.tagName("td"));
         	//should be a list object not null
-        	System.err.println(acmeListAfter);
+        	System.err.println("(object) list of colmns"+cell);
 
         	try{acmeListBefore[i] = cell.get(0).toString();}
         	catch (IndexOutOfBoundsException err){
@@ -81,20 +83,31 @@ public class TestDeleteACMEPass {
         	if(i>99) break;
 
         }
-        //this located the element based on the button text
+*/ 
+    	numRowsBefore = rows.size();
+    	//this located the element based on the button text
         //might not be working perfectly since page seems to hang and does not show the updated table after deletion
-        driver.findElement(By.xpath("//span[contains(text(), 'Delete')]")).click();
+        WebElement ACMEPassLoginLabel = driver.findElement(By.xpath("//td[contains(text(),'TestSiteD')]"));
+        ACMEPassLoginLabel.findElement(By.xpath("./..//button[contains(@class, 'btn btn-danger btn-sm')]")).click();
 
-
+    	driver.findElement(By.xpath("//span[contains(text(), 'Delete')]")).click();
+        driver.navigate().refresh();
+    	Thread.sleep(5000);
+    	//remake rows object after refresh
+    	rows = driver.findElements(By.tagName("tr"));
+        numRowsAfter = rows.size();
+    	
+/*
     int j =0;
-    boolean atLeastOneDiff = false;
     for(WebElement m : rows){
+    	System.err.println("A _ " + m.getTagName());
+    	
     	//try to find cells within each row of the table
     	List<WebElement> cell = m.findElements(By.tagName("td"));
-    	System.err.println(acmeListAfter);
+    	System.err.println("B _ "+acmeListAfter);
     	//get cell 1 which should be the id number
     	acmeListAfter[j] = cell.get(0).toString();
-    	System.err.println(acmeListAfter[j]);
+    	System.err.println("C _ "+acmeListAfter[j]);
         if(acmeListBefore[j].equals(acmeListAfter[j])){
         	
         }
@@ -102,9 +115,66 @@ public class TestDeleteACMEPass {
     	if(j>99) break;
 
     }
-    
-  assertEquals(true,false);  
+*/    
+    	System.err.println(numRowsBefore);
+    	System.err.println(numRowsAfter);
+
+  assertEquals(numRowsBefore,numRowsAfter+1);  
     }    
+    
+    @Test
+    public void deleteACMEPassCancel() throws Exception {
+    	String username = "jo.thomas@acme.com";
+    	String userpass = "mustang";
+    	
+    	driver.get(url);
+        driver.findElement(By.className("glyphicon-log-in")).click();
+        driver.findElement(By.id("username")).sendKeys(username);
+        driver.findElement(By.id("password")).sendKeys(userpass);
+        driver.findElement(By.className("btn-primary")).click();
+        
+        WebElement element = driver.findElement(By.xpath("//a[contains(text(),'ACMEPass')]"));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+
+        driver.findElement(By.xpath("//span[contains(text(),'Create new ACME Pass')]")).click();
+        driver.findElement(By.id("field_site")).sendKeys("TestSiteC");
+        driver.findElement(By.id("field_login")).sendKeys("TestLoginC");
+        driver.findElement(By.id("field_password")).sendKeys("TestPassC");
+        //save ACMEPass
+        driver.findElement(By.xpath("//span[contains(text(),'Save')]")).click();
+        
+        Thread.sleep(5000);
+
+        //get the rows of the table
+        //each row should be a different password
+        List<WebElement> rows = driver.findElements(By.tagName("tr"));
+        boolean atLeastOneDiff = false;
+
+        //should be a list object not null
+    	System.err.println("(object) list of rows:>"+rows);
+
+    	int numRowsBefore;
+    	int numRowsAfter;
+
+    	numRowsBefore = rows.size();
+    	//this located the element based on the button text
+        //might not be working perfectly since page seems to hang and does not show the updated table after deletion
+        WebElement ACMEPassLoginLabel = driver.findElement(By.xpath("//td[contains(text(),'TestSiteC')]"));
+        ACMEPassLoginLabel.findElement(By.xpath("./..//button[contains(@class, 'btn btn-danger btn-sm')]")).click();
+
+    	driver.findElement(By.xpath("//span[contains(text(), 'Cancel')]")).click();
+        driver.navigate().refresh();
+    	Thread.sleep(5000);
+    	//remake rows object after refresh
+    	rows = driver.findElements(By.tagName("tr"));
+        numRowsAfter = rows.size();
+
+        System.err.println(numRowsBefore);
+    	System.err.println(numRowsAfter);
+
+  assertEquals(numRowsBefore,numRowsAfter);  
+    }    
+    
     @After
     public void tearDown() throws Exception {
         driver.quit();
