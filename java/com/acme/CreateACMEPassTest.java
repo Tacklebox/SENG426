@@ -42,7 +42,10 @@ public class CreateACMEPassTest {
     public void createACMEPass(){
         driver.findElement(By.xpath("//span[contains(text(),'Create new ACME Pass')]")).click();
         //populate fields
-        driver.findElement(By.id("field_site")).sendKeys("TestSite");
+
+        String siteName = generateSiteName();
+
+        driver.findElement(By.id("field_site")).sendKeys(siteName);
         driver.findElement(By.id("field_login")).sendKeys("TestLogin");
         driver.findElement(By.id("field_password")).sendKeys("TestPass");
 
@@ -51,8 +54,8 @@ public class CreateACMEPassTest {
 
         //ensure the newly added password exists in the list
         //driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        WebElement ACMEPassLoginLabel = driver.findElement(By.xpath("//td[contains(text(),'TestSite')]"));
-        assertEquals("TestSite", ACMEPassLoginLabel.getText());
+        WebElement ACMEPassLoginLabel = driver.findElement(By.xpath("//td[contains(text(),'" + siteName + "')]"));
+        assertEquals(siteName, ACMEPassLoginLabel.getText());
 
         //CLEANUP
         //get the table row/then click the delete button
@@ -66,7 +69,8 @@ public class CreateACMEPassTest {
     public void createACMEPassWithGenerator(){
         driver.findElement(By.xpath("//span[contains(text(),'Create new ACME Pass')]")).click();
         //populate fields
-        driver.findElement(By.id("field_site")).sendKeys("TestSite");
+        String siteName = generateSiteName();
+        driver.findElement(By.id("field_site")).sendKeys(siteName);
         driver.findElement(By.id("field_login")).sendKeys("TestLogin");
 
         //use generate password applet
@@ -81,7 +85,7 @@ public class CreateACMEPassTest {
         //ensure the newly added password exists in the list
         //driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         WebElement ACMEPassLoginLabel = driver.findElement(By.xpath("//td[contains(text(),'TestSite')]"));
-        assertEquals("TestSite", ACMEPassLoginLabel.getText());
+        assertEquals(siteName, ACMEPassLoginLabel.getText());
         //CLEANUP
         //get the table row/then click the delete button
         ACMEPassLoginLabel.findElement(By.xpath("./..//button[contains(@class, 'btn btn-danger btn-sm')]")).click();
@@ -106,8 +110,10 @@ public class CreateACMEPassTest {
     public void createACMEPassWithoutLogin(){
         driver.findElement(By.xpath("//span[contains(text(),'Create new ACME Pass')]")).click();
 
+        String siteName = generateSiteName();
+
         //populate fields
-        driver.findElement(By.id("field_site")).sendKeys("TestSite");
+        driver.findElement(By.id("field_site")).sendKeys(siteName);
         //driver.findElement(By.id("field_login")).sendKeys("TestLogin");
         driver.findElement(By.id("field_password")).sendKeys("TestPass");
 
@@ -120,8 +126,10 @@ public class CreateACMEPassTest {
     public void createACMEPassWithoutPassword(){
         driver.findElement(By.xpath("//span[contains(text(),'Create new ACME Pass')]")).click();
 
+        String siteName = generateSiteName();
+
         //populate fields
-        driver.findElement(By.id("field_site")).sendKeys("TestSite");
+        driver.findElement(By.id("field_site")).sendKeys(siteName);
         driver.findElement(By.id("field_login")).sendKeys("TestLogin");
         //driver.findElement(By.id("field_password")).sendKeys("TestPass");
 
@@ -130,7 +138,7 @@ public class CreateACMEPassTest {
     }
 
     @Test
-    public void createACMEPassCancel(){
+    public void createACMEPassButCancel(){
         driver.findElement(By.xpath("//span[contains(text(),'Create new ACME Pass')]")).click();
 
         //get current footer text
@@ -170,5 +178,11 @@ public class CreateACMEPassTest {
         driver.findElement(By.id("username")).sendKeys("jo.thomas@acme.com");
         driver.findElement(By.id("password")).sendKeys("mustang");
         driver.findElement(By.className("btn-primary")).click();
+    }
+
+    public String generateSiteName(){
+        String siteName = "TestSite";
+        siteName += org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric(8);
+        return siteName;
     }
 }
