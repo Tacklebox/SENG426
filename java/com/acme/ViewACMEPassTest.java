@@ -35,7 +35,7 @@ public class ViewACMEPassTest {
     }
 
     @Test
-    public void viewACMEPass(){
+    public void viewACMEPass() throws Exception{
         login();
 
         WebElement element = driver.findElement(By.xpath("//a[contains(text(),'ACMEPass')]"));
@@ -47,7 +47,7 @@ public class ViewACMEPassTest {
     }
 
     @Test
-    public void tryToViewPassNotLoggedIn(){
+    public void tryToViewPassNotLoggedIn() throws Exception{
         driver.get(url);
         List<WebElement> element = driver.findElements(By.xpath("//a[contains(text(),'ACMEPass')]"));
 
@@ -55,7 +55,7 @@ public class ViewACMEPassTest {
     }
 
     @Test
-    public void ensureTableIsOnThePage(){
+    public void ensureTableIsOnThePage() throws Exception{
         login();
 
         WebElement element = driver.findElement(By.xpath("//a[contains(text(),'ACMEPass')]"));
@@ -71,7 +71,7 @@ public class ViewACMEPassTest {
         assertEquals("Password", tableHeadings.get(3).getText());
         assertEquals("Created Date", tableHeadings.get(4).getText());
         assertEquals("Last Modified Date", tableHeadings.get(5).getText());
-        
+
     }
 
     @After
