@@ -183,6 +183,7 @@ public class AcmePassPaginationTest {
 
     private void createPasswords(int numPasswords) throws Exception{
         for (int i = 0; i < numPasswords; i += 1) {
+
             WebElement createButton = (new WebDriverWait(driver, 10, 500))
                     .until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[ui-sref=\"acme-pass.new\"]")));
             createButton.click();
