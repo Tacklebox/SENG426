@@ -131,6 +131,41 @@ public class AcmePassPaginationTest {
 
     }
 
+    @Test
+    public void ForwardPagination2PagesTest() throws Exception{
+        int number = 41;
+        createPasswords(number);
+
+        WebElement pageNextButton = (new WebDriverWait(driver, 10, 500))
+                .until(ExpectedConditions.elementToBeClickable(
+                        driver.findElement(By.xpath("//li[contains(@class, 'next')]/a"))
+                ));
+        pageNextButton.click();
+
+        pageNextButton = (new WebDriverWait(driver, 10, 500))
+                .until(ExpectedConditions.elementToBeClickable(
+                        driver.findElement(By.xpath("//li[contains(@class, 'next')]/a"))
+                ));
+        pageNextButton.click();
+
+        assertEquals("TestLogin40", driver.findElement(By.xpath("//td[contains(text(),'TestLogin40')]")).getText());
+
+        WebElement pagePreviousButton = (new WebDriverWait(driver, 10, 500))
+                .until(ExpectedConditions.elementToBeClickable(
+                        driver.findElement(By.xpath("//li[contains(@class, 'previous')]/a"))
+                ));
+        pagePreviousButton.click();
+
+        pagePreviousButton = (new WebDriverWait(driver, 10, 500))
+                .until(ExpectedConditions.elementToBeClickable(
+                        driver.findElement(By.xpath("//li[contains(@class, 'previous')]/a"))
+                ));
+        pagePreviousButton.click();
+
+        cleanupPasswords();
+
+    }
+
     private void login() throws Exception {
         driver.get(url);
         driver.findElement(By.className("glyphicon-log-in")).click();

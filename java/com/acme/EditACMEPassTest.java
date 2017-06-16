@@ -41,8 +41,30 @@ public class EditACMEPassTest {
 
     }
 
+
     @Test
-    public void editExistingPasswordChangePassword(){
+    public void editModalExists()throws Exception{
+
+        WebElement editButton = (new WebDriverWait(driver, 10, 500))
+                .until(ExpectedConditions.elementToBeClickable(
+                        By.xpath("//span[contains(@class, 'glyphicon-pencil')]"))
+                );
+        editButton.click();
+
+        WebElement editForm = (new WebDriverWait(driver, 10, 500))
+                .until(ExpectedConditions.elementToBeClickable(
+                        By.cssSelector("form[name=\"editForm\"]"))
+                );
+        assertEquals(true, editForm.isDisplayed());
+
+        driver.findElement(By.xpath("//span[contains(text(),'Cancel')]")).click();
+
+        cleanupPasswords(number);
+
+    }
+
+    @Test
+    public void editExistingPasswordChangePassword() throws Exception{
 
         driver.findElement(By.xpath("//span[contains(@class, 'glyphicon-pencil')]")).click();
         WebElement password = driver.findElement(By.id("field_password"));
@@ -59,7 +81,7 @@ public class EditACMEPassTest {
     }
 
     @Test
-    public void editExistingPasswordChangePasswordButCancel(){
+    public void editExistingPasswordChangePasswordButCancel()throws Exception{
 
         driver.findElement(By.xpath("//span[contains(@class, 'glyphicon-pencil')]")).click();
         WebElement password = driver.findElement(By.id("field_password"));
@@ -75,7 +97,7 @@ public class EditACMEPassTest {
     }
 
     @Test
-    public void editExistingPasswordChangeSite(){
+    public void editExistingPasswordChangeSite()throws Exception{
 
         driver.findElement(By.xpath("//span[contains(@class, 'glyphicon-pencil')]")).click();
         WebElement Site = driver.findElement(By.id("field_site"));
@@ -96,7 +118,7 @@ public class EditACMEPassTest {
     }
 
     @Test
-    public void editExistingPasswordChangeSiteButCancel(){
+    public void editExistingPasswordChangeSiteButCancel()throws Exception{
 
         driver.findElement(By.xpath("//span[contains(@class, 'glyphicon-pencil')]")).click();
         WebElement password = driver.findElement(By.id("field_site"));
@@ -113,7 +135,7 @@ public class EditACMEPassTest {
     }
 
     @Test
-    public void editExistingPasswordChangeLogin(){
+    public void editExistingPasswordChangeLogin()throws Exception{
 
         driver.findElement(By.xpath("//span[contains(@class, 'glyphicon-pencil')]")).click();
         WebElement password = driver.findElement(By.id("field_login"));
@@ -127,7 +149,7 @@ public class EditACMEPassTest {
     }
 
     @Test
-    public void editExistingPasswordChangeLoginButCancel(){
+    public void editExistingPasswordChangeLoginButCancel()throws Exception{
 
         driver.findElement(By.xpath("//span[contains(@class, 'glyphicon-pencil')]")).click();
         WebElement password = driver.findElement(By.id("field_login"));
@@ -141,7 +163,7 @@ public class EditACMEPassTest {
     }
 
     @Test
-    public void editExistingPasswordChangePasswordByGenerateButton(){
+    public void editExistingPasswordChangePasswordByGenerateButton()throws Exception{
         String genPass = "";
 
         driver.findElement(By.xpath("//span[contains(@class, 'glyphicon-pencil')]")).click();
@@ -163,7 +185,7 @@ public class EditACMEPassTest {
     }
 
     @Test
-    public void editExistingPasswordChangePasswordByGenerateButtonButCancel(){
+    public void editExistingPasswordChangePasswordByGenerateButtonButCancel()throws Exception{
         String genPass = "";
 
         driver.findElement(By.xpath("//span[contains(@class, 'glyphicon-pencil')]")).click();
