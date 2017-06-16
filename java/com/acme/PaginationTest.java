@@ -24,7 +24,7 @@ import static org.junit.Assert.fail;
 /**
  * Created by justinmacaulay on 2017-06-15.
  */
-public class AcmePassPaginationTest {
+public class PaginationTest {
     private WebDriver driver;
     private int numberOfUsers = 0;
     private String url;
@@ -193,7 +193,7 @@ public class AcmePassPaginationTest {
             driver.findElement(By.id("field_password")).sendKeys("TestPass" + String.valueOf(i));
             //save ACMEPass
             driver.findElement(By.cssSelector("button[type=\"submit\"]")).click();
-            driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
+            TimeUnit.MILLISECONDS.sleep(250);
         }
     }
 
@@ -242,7 +242,7 @@ public class AcmePassPaginationTest {
                 ));
     }
 
-    void waitForLoad(WebDriver driver) {
+    void waitForLoad(WebDriver driver) throws Exception {
         new WebDriverWait(driver, 30).until((ExpectedCondition<Boolean>) wd ->
                 ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
     }
