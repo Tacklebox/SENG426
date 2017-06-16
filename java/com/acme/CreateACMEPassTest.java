@@ -25,6 +25,7 @@ public class CreateACMEPassTest {
 
     @Before
     public void setUp() throws Exception {
+//        System.setProperty("webdriver.gecko.driver", "/home/kelvin/seng426/geckodriver");
 
         driver = new FirefoxDriver();
         url = "http://localhost:8080/#/";
@@ -65,6 +66,62 @@ public class CreateACMEPassTest {
         driver.findElement(By.xpath("//span[contains(text(), 'Delete')]")).click();
     }
 
+    @Test
+    public void createACMEPassDuplicate() throws InterruptedException{
+
+        String siteName = generateSiteName();
+        String login = "duplicatename";
+        String pass = "abc123";
+
+
+    	driver.findElement(By.xpath("//span[contains(text(),'Create new ACME Pass')]")).click();
+        //populate fields
+
+        driver.findElement(By.id("field_site")).sendKeys(siteName);
+        driver.findElement(By.id("field_login")).sendKeys(login);
+        driver.findElement(By.id("field_password")).sendKeys(pass);
+        //save ACMEPass
+        driver.findElement(By.xpath("//span[contains(text(),'Save')]")).click();
+
+        //reload page
+        driver.get(url);
+        WebElement element = driver.findElement(By.xpath("//a[contains(text(),'ACMEPass')]"));
+        JavascriptExecutor executor = (JavascriptExecutor) driver;
+        executor.executeScript("arguments[0].click();", element);
+        
+    	//redo same acmepass creation
+    	driver.findElement(By.xpath("//span[contains(text(),'Create new ACME Pass')]")).click();
+
+        driver.findElement(By.id("field_site")).sendKeys(siteName);
+        driver.findElement(By.id("field_login")).sendKeys(login);
+        driver.findElement(By.id("field_password")).sendKeys(pass);
+        driver.findElement(By.xpath("//span[contains(text(),'Save')]")).click();
+
+        //reload page
+        driver.get(url);
+        element = driver.findElement(By.xpath("//a[contains(text(),'ACMEPass')]"));
+        executor = (JavascriptExecutor) driver;
+        executor.executeScript("arguments[0].click();", element);
+
+    	//create a list of all matches
+        List<WebElement> ACMEPassList = driver.findElements(By.xpath("//td[contains(text(),'" + siteName + "')]"));
+        //assert that the size of the list is 1 (only 1 instance created / no duplicate)
+        //should fail with 1 != 2 before applying any fix to source code
+        assertEquals(1, ACMEPassList.size());
+
+        //CLEANUP
+        //get the table row/then click the delete button
+        for(WebElement e : ACMEPassList){
+        	e.findElement(By.xpath("./..//button[contains(@class, 'btn btn-danger btn-sm')]")).click();
+
+        	//confirm delete
+        	driver.findElement(By.xpath("//span[contains(text(), 'Delete')]")).click();
+        	Thread.sleep(5000);
+
+        }
+    }
+
+    
     @Test
     public void createACMEPassWithGenerator(){
         driver.findElement(By.xpath("//span[contains(text(),'Create new ACME Pass')]")).click();
