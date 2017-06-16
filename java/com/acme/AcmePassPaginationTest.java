@@ -8,6 +8,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -70,7 +71,7 @@ public class AcmePassPaginationTest {
                 ));
         pagePreviousButton.click();
 
-        cleanupPasswords(number);
+        cleanupPasswords();
 
     }
 
@@ -95,7 +96,7 @@ public class AcmePassPaginationTest {
 
         assertEquals("TestLogin0", driver.findElement(By.xpath("//td[contains(text(),'TestLogin0')]")).getText());
 
-        cleanupPasswords(number);
+        cleanupPasswords();
 
     }
 
@@ -126,7 +127,7 @@ public class AcmePassPaginationTest {
                 ));
         pagePreviousButton.click();
 
-        cleanupPasswords(number);
+        cleanupPasswords();
 
     }
 
@@ -160,19 +161,14 @@ public class AcmePassPaginationTest {
         }
     }
 
-    private void cleanupPasswords(int numPasswords) throws Exception {
-        for(int i = 0; i < numPasswords; i += 1) {
-            //get the table row/then click the delete button
-
-            WebElement deleteButton = (new WebDriverWait(driver, 10, 500))
-                    .until(ExpectedConditions.elementToBeClickable(
-                            driver.findElement(By.xpath("//td[contains(text(),'TestSite" + String.valueOf(i) + "')]"))
-                                    .findElement(By.xpath("./..//button[contains(@class, 'btn btn-danger btn-sm')]"))
-                    ));
-            deleteButton.click();
-
-            //confirm delete
+    private void cleanupPasswords() throws Exception {
+        waitForLoad(driver);
+        while(driver.findElements(By.cssSelector(".btn-danger")).size()>0){
+            TimeUnit.MILLISECONDS.sleep(250);
+            driver.findElement(By.cssSelector(".btn-danger")).click();
+            waitForLoad(driver);
             driver.findElement(By.xpath("//span[contains(text(), 'Delete')]")).click();
+            waitForLoad(driver);
         }
     }
 
@@ -208,5 +204,10 @@ public class AcmePassPaginationTest {
                 .until(ExpectedConditions.presenceOfElementLocated(
                         By.cssSelector("div[class=\"table-responsive\"]")
                 ));
+    }
+
+    void waitForLoad(WebDriver driver) {
+        new WebDriverWait(driver, 30).until((ExpectedCondition<Boolean>) wd ->
+                ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
     }
 }
