@@ -50,7 +50,6 @@ public class TestGeneratePass {
                         By.cssSelector("form[name=\"pdwGenForm\"]"))
                 );
         assertEquals(true, pwGenForm.isDisplayed());
-
     }
 
     @Test
@@ -77,9 +76,16 @@ public class TestGeneratePass {
         setCheckboxValue(formElements.get("special"), true);
         setCheckboxValue(formElements.get("repetition"), true);
 
-        int[] test_lengths = {0, 1, 10, 100, 1000};
+        // Here we only test up to 56 items since the without repetition
+        // we only have so much entropy
+        // 56 == len([a-z] + [A-Z] + [0-9] + [!@#$%-_])
+        int[] test_lengths = {0, 1, 10, 56};
         for (Integer length : test_lengths) {
             generateAndValidateLength(formElements, length);
+            assertEquals(
+                    true,
+                    formElements.get("output").getAttribute("value").matches("(?:([A-Za-z0-9!@#$%\\-_])(?!.*\\1))*")
+            );
         }
     }
 
