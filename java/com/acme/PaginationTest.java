@@ -38,7 +38,7 @@ public class PaginationTest {
         driver = new FirefoxDriver();
         url = "http://localhost:8080/#/";
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-
+        driver.manage().window().maximize();
         login();
         navigateToACMEPass();
     }
@@ -71,7 +71,7 @@ public class PaginationTest {
                 ));
         pagePreviousButton.click();
 
-        cleanupPasswords();
+        cleanupPasswords(number);
 
     }
 
@@ -96,7 +96,7 @@ public class PaginationTest {
 
         assertEquals("TestLogin0", driver.findElement(By.xpath("//td[contains(text(),'TestLogin0')]")).getText());
 
-        cleanupPasswords();
+        cleanupPasswords(number);
 
     }
 
@@ -127,7 +127,7 @@ public class PaginationTest {
                 ));
         pagePreviousButton.click();
 
-        cleanupPasswords();
+        cleanupPasswords(number);
 
     }
 
@@ -162,7 +162,7 @@ public class PaginationTest {
                 ));
         pagePreviousButton.click();
 
-        cleanupPasswords();
+        cleanupPasswords(number);
 
     }
 
@@ -197,14 +197,16 @@ public class PaginationTest {
         }
     }
 
-    private void cleanupPasswords() throws Exception {
+    private void cleanupPasswords(int numPasswords) throws Exception {
         waitForLoad(driver);
-        while(driver.findElements(By.cssSelector(".btn-danger")).size()>0){
+        int i = 0;
+        while(i < numPasswords){
             TimeUnit.MILLISECONDS.sleep(250);
             driver.findElement(By.cssSelector(".btn-danger")).click();
             waitForLoad(driver);
             driver.findElement(By.xpath("//span[contains(text(), 'Delete')]")).click();
             waitForLoad(driver);
+            i++;
         }
     }
 
